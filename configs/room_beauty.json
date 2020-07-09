@@ -1,0 +1,42 @@
+{
+    "logging" : true,
+    "seed" : -1,
+    "train_data_dir" : "../datasets/room/train",
+    "test_data_dir" : "../datasets/room/test",
+    "job_name" : "room_beauty_id",
+    "job_group" : "beauty_room",
+    "checkpoint_interval" : 10000,
+    "test_interval" : 100,
+    "iterations" : 2000000,
+    "batch_size" : 16,
+    "test_batch_size" : 16,
+    "dataset" : "room",
+    "cached_dataset" : true,
+    "samples_per_pixel" : 4,
+    "views_per_scene" : 4,
+    "random_num_views" : false,
+    "latent_separation" : true,
+    "multi_gpu" : true,
+    "model" : {
+        "representations" : [{
+            "type" : "Pool",
+            "observation_passes" : ["beauty", "normal", "position", "id"],
+            "representation_dim" : 256,
+            "render_size" : 64
+        }],
+        "generators" : [
+        {
+            "type" : "PixelCNN",
+            "query_passes" : ["normal", "position", "id"],
+            "output_passes" : ["beauty"],
+            "render_size" : 64,
+            "settings" : {
+                "loss" : ["logl1", "logssim"],
+                "layers" : 10,
+                "propagate_buffers" : true
+            }
+        }],
+        "pose_dim" : 16,
+        "output_pass" : "beauty"
+    }
+}

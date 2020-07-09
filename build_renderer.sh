@@ -1,0 +1,1 @@
+cd code/renderer/optix_renderer && mkdir -p build && cd build && cmake .. && make && cd ../../../..

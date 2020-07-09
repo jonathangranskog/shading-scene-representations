@@ -1,0 +1,44 @@
+{
+    "logging" : true,
+    "seed" : -1,
+    "train_data_dir" : "",
+    "test_data_dir" : "",
+    "job_name" : "archviz_save",
+    "job_group" : "beauty_archviz",
+    "checkpoint_interval" : 100000,
+    "test_interval" : 100,
+    "iterations" : 2000000,
+    "batch_size" : 16,
+    "test_batch_size" : 16,
+    "dataset" : "archviz",
+    "cached_dataset" : false,
+    "samples_per_pixel" : 1,
+    "views_per_scene" : 4,
+    "random_num_views" : false,
+    "latent_separation" : true,
+    "multi_gpu" : false,
+    "model" : {
+        "representations" : [{
+            "type" : "Pool",
+            "observation_passes" : ["beauty", "normal", "position", "id"],
+            "observation_dim" : 12,
+            "representation_dim" : 256,
+            "render_size" : 64
+        }],
+        "generators" : [
+        {
+            "type" : "PixelCNN",
+            "query_passes" : ["normal", "position", "id"],
+            "output_passes" : ["beauty"],
+            "query_dim" : 9,
+            "render_size" : 64,
+            "output_dim" : 3,
+            "settings" : {
+                "loss" : ["logl1", "logssim"],
+                "layers" : 10
+            }
+        }],
+        "pose_dim" : 16,
+        "output_pass" : "beauty"
+    }
+}

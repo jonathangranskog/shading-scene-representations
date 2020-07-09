@@ -1,0 +1,46 @@
+{
+    "logging" : true,
+    "seed" : -1,
+    "train_data_dir" : "../datasets/room/train",
+    "test_data_dir" : "../datasets/room/test",
+    "job_name" : "room_beauty_gqn_buffers",
+    "job_group" : "GQN_LONG_TERM",
+    "checkpoint_interval" : 10000,
+    "test_interval" : 500,
+    "iterations" : 20000000,
+    "batch_size" : 16,
+    "test_batch_size" : 16,
+    "dataset" : "room",
+    "cached_dataset" : true,
+    "samples_per_pixel" : 1,
+    "views_per_scene" : 4,
+    "random_num_views" : false,
+    "latent_separation" : true,
+    "multi_gpu" : true,
+    "model" : {
+        "representations" : [{
+            "type" : "Pool",
+            "observation_passes" : ["beauty", "position", "normal", "id"],
+            "representation_dim" : 256,
+            "render_size" : 64,
+            "gradient_reg" : 1.0,
+            "start_sigmoid" : 5.0,
+            "end_sigmoid" : 100.0,
+            "sharpen_sigmoid" : 10000.0,
+            "sharpening" : 500000,
+            "final_sharpening" : 100000
+        }],
+        "generators" : [{
+            "type" : "GQN",
+            "query_passes" : ["position", "normal", "id"],
+            "output_passes" : ["beauty"],
+            "render_size" : 64,
+            "settings" : {
+                "core_count" : 12,
+                "upscale_sharing": false
+            }
+        }],
+        "pose_dim" : 16,
+        "output_pass" : "beauty"
+    }
+}

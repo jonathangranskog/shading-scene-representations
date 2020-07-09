@@ -1,0 +1,49 @@
+{
+    "logging" : true,
+    "seed" : -1,
+    "train_data_dir" : "../datasets/archviz/train",
+    "test_data_dir" : "../datasets/archviz/test",
+    "job_name" : "archviz_beauty_gqn_buffers",
+    "job_group" : "archviz_beauty",
+    "checkpoint_interval" : 10000,
+    "test_interval" : 500,
+    "iterations" : 2000000,
+    "batch_size" : 16,
+    "test_batch_size" : 16,
+    "dataset" : "archviz",
+    "cached_dataset" : true,
+    "samples_per_pixel" : 1,
+    "views_per_scene" : 4,
+    "random_num_views" : false,
+    "latent_separation" : true,
+    "multi_gpu" : true,
+    "model" : {
+        "representations" : [{
+            "type" : "Pool",
+            "observation_passes" : ["beauty", "position", "normal", "id"],
+            "observation_dim" : 10,
+            "representation_dim" : 256,
+            "render_size" : 64,
+            "gradient_reg" : 1.0,
+            "start_sigmoid" : 5.0,
+            "end_sigmoid" : 100.0,
+            "sharpen_sigmoid" : 10000.0,
+            "sharpening" : 500000,
+            "final_sharpening" : 100000
+        }],
+        "generators" : [{
+            "type" : "GQN",
+            "query_passes" : ["position", "normal", "id"],
+            "output_passes" : ["beauty"],
+            "query_dim" : 7,
+            "render_size" : 64,
+            "output_dim" : 3,
+            "settings" : {
+                "core_count" : 12,
+                "upscale_sharing": false
+            }
+        }],
+        "pose_dim" : 16,
+        "output_pass" : "beauty"
+    }
+}
